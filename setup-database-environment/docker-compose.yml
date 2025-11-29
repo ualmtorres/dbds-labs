@@ -1,0 +1,38 @@
+version: "3"
+services:
+  jupyter:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      no_cache: true
+    volumes:
+      - type: bind
+        source: ../notebooks
+        target: /home/jovyan/work
+    ports:
+      - 8888:8888
+    command: "start-notebook.py --NotebookApp.token="
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: dbds
+      MYSQL_USER: dbds
+      MYSQL_PASSWORD: dbds
+      MYSQL_DATABASE: dbds
+    ports:
+      - "3306:3306"
+    volumes:
+      - ds_mysql_data:/var/lib/mysql
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: dbds
+      POSTGRES_PASSWORD: dbds
+      POSTGRES_DB: dbds
+    ports:
+      - "5432:5432"
+    volumes:
+      - ds_postgres_data:/var/lib/postgresql
+volumes:
+  ds_mysql_data:
+  ds_postgres_data:
